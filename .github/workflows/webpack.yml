@@ -1,28 +1,53 @@
-名称: NodeJS与Webpack
+name: NodeJS 与 Webpack
 
-开启:
+on:
   push:
-分支: [ "main" ]
- 拉取请求:
-分支: [ "main" ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
-运行于: ubuntu-latest
+    runs-on: ubuntu-latest
 
-策略:
-矩阵:
-节点版本: [18.x,20.x,22.x]
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
 
-步骤:
-    - 使用: actions/checkout@v4
+    steps:
+    - uses: actions/checkout@v4
 
-{matrix.node-version}
-: actions/setup-node@v4
-与:
+    - name: 使用 Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
-    - 名称: 构建
-运行: |
-        npm install
-        npx webpack
+    - name: 安装依赖
+      run: npm ci
+
+    - name: 构建
+      run: npm run build
+
+    - name: 验证构建输出
+      run: |
+        echo "检查构建输出文件..."
+        ls -la dist/
+        if [ -f "dist/bundle.js" ]; then
+          echo "✓ bundle.js 存在"
+        else
+          echo "✗ bundle.js 不存在"
+          exit 1
+        fi
+        if [ -f "dist/styles.css" ]; then
+          echo "✓ styles.css 存在"
+        else
+          echo "✗ styles.css 不存在"
+          exit 1
+        fi
+        if [ -f "dist/index.html" ]; then
+          echo "✓ index.html 存在"
+        else
+          echo "✗ index.html 不存在"
+          exit 1
+        fi

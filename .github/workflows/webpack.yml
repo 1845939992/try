@@ -1,0 +1,28 @@
+名称: NodeJS与Webpack
+
+开启:
+  push:
+分支: [ "main" ]
+ 拉取请求:
+分支: [ "main" ]
+
+jobs:
+  build:
+运行于: ubuntu-latest
+
+策略:
+矩阵:
+节点版本: [18.x,20.x,22.x]
+
+步骤:
+    - 使用: actions/checkout@v4
+
+{matrix.node-version}
+: actions/setup-node@v4
+与:
+        node-version: ${{ matrix.node-version }}
+
+    - 名称: 构建
+运行: |
+        npm install
+        npx webpack

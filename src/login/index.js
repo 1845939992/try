@@ -1,4 +1,4 @@
-src/login/index.js - 入口文件
+// src/login/index.js - 入口文件
 
 // 引入 CSS 样式
 require('./my.css')

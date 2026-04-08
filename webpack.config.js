@@ -8,8 +8,8 @@ module.exports = {
   // 根据环境变量设置模式
   // 开发模式下，webpack 会监听文件变化，当文件变化时，会自动重新编译。
   // 开发模式下，webpack 会输出更多调试信息。
-  devtool: process.env.NODE_ENV === 'development' ? 'eval-source-map' : 'source-map',
-  // Source Map 配置：开发环境使用 eval-source-map，生产环境使用 source-map
+  devtool: process.env.NODE_ENV === 'development' ? 'eval-source-map' : false,
+  // Source Map 配置：开发环境使用 eval-source-map，生产环境禁用（提升性能）
   entry: './src/login/index.js',
   output: {
     filename: 'bundle.js',
@@ -57,7 +57,7 @@ module.exports = {
   //优化
   optimization: {
     minimizer: [
-      '...',// 压缩 JS
+      '...',// 保留默认的 JS 压缩
       new CssMinimizerPlugin()
     ]
   },
@@ -73,4 +73,5 @@ module.exports = {
     alias: {
       '@': __dirname + '/src'
     }
-  }}
+  }
+}
